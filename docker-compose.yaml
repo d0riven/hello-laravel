@@ -1,0 +1,59 @@
+version: "3.9"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./tools/localdev/php/Dockerfile
+    volumes:
+      - type: bind
+        source: .
+        target: /workspace
+      - type: bind
+        source: ./tools/localdev/php/php.ini
+        target: /usr/local/etc/php/php.ini
+
+  web:
+    image: nginx:latest
+    ports:
+      - target: 80
+        published: ${WEB_PUBLISHED_PORT:-8080}
+        protocol: tcp
+        mode: host
+    volumes:
+      - type: bind
+        source: .
+        target: /workspace
+      - type: bind
+        source: ./tools/localdev/nginx/default.conf
+        target: /etc/nginx/conf.d/default.conf
+        read_only: true
+
+  db:
+    image: mysql:8.0
+    ports:
+      - target: 3306
+        published: ${DB_PUBLISHED_PORT:-13306}
+        protocol: tcp
+        mode: host
+    volumes:
+      - ./tools/localdev/mysql/_data:/var/lib/mysql
+#      - type: bind
+#        source: ./tools/localdev/mysql/_data # ディレクトリなしだとこの書き方ができない
+#        target: /var/lib/mysql
+      - type: bind
+        source: ./tools/localdev/mysql/my.cnf
+        target: /etc/mysql/my.cnf
+        read_only: true
+    environment:
+      - MYSQL_DATABASE=${DB_DATABASE:-laravel}
+      - MYSQL_USER=${DB_USERNAME:-dbuser}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-password}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-password}
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - target: 8025
+        published: ${MAILHOG_PUBLISHED_PORT:-8025}
+        protocol: tcp
+        mode: host

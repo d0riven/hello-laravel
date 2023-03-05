@@ -1,4 +1,4 @@
-php_docker := docker compose exec app
+php_docker := docker compose exec -w /workspace app
 
 
 server:

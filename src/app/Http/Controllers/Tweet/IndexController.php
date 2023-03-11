@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Tweet;
 use App\Http\Controllers\Controller;
 use App\Models\Tweet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\Factory;
 
@@ -19,7 +20,7 @@ class IndexController extends Controller
 //        return view('tweet.index', ['name' => 'laravel']);
 //        return View::make('tweet.index', ['name' => 'laravel']);
 //        return $factory->make('tweet.index', ['name' => 'laravel']);
-        $tweets = Tweet::all();
+        $tweets = Tweet::all()->sortByDesc('created_at');
         return view('tweet.index')->with('tweets', $tweets);
     }
 }

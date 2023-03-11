@@ -24,6 +24,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // whereの代わりにこういう書き方で一元的に定義することも可能
+        // Route::pattern('tweetId', '[0-9]+');
         $this->configureRateLimiting();
 
         $this->routes(function () {

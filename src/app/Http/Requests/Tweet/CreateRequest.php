@@ -26,6 +26,11 @@ class CreateRequest extends FormRequest
         ];
     }
 
+    public function userId(): int
+    {
+        return $this->user()->id;
+    }
+
     public function tweet(): string
     {
         return $this->input('tweet');
@@ -34,6 +39,7 @@ class CreateRequest extends FormRequest
     public function toArray(): array
     {
         return [
+            'user_id' => $this->userId(),
             'content' => $this->tweet(),
         ];
     }

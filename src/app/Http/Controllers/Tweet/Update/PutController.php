@@ -5,15 +5,24 @@ namespace App\Http\Controllers\Tweet\Update;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tweet\UpdateRequest;
 use App\Models\Tweet;
+use App\Services\TweetService;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class PutController extends Controller
 {
+    public function __construct(private readonly TweetService $service)
+    {
+    }
+
     /**
      * Handle the incoming request.
      */
     public function __invoke(UpdateRequest $request)
     {
         $tweet = Tweet::where('id', $request->id())->firstOrFail();
+        if ($this->service->checkOwnTweet($request->user()->id, $tweetId)) {
+            throw new AccessDeniedHttpException();
+        }
         $tweet->content = $request->tweet();
         $tweet->save();
         return redirect()

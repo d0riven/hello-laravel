@@ -22,6 +22,8 @@ RUN apt-get update \
     libzip-dev \
     libicu-dev \
     libonig-dev \
+  && curl -sLS https://deb.nodesource.com/setup_18.x | bash - \
+  && apt-get -y install --no-install-recommends nodejs \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* \
   && locale-gen en_US.UTF-8 \
@@ -36,5 +38,3 @@ RUN apt-get update \
 
 RUN pecl install xdebug && \
   docker-php-ext-enable xdebug
-
-COPY ./infra/docker/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini

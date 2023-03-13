@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers as Controllers;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,20 +20,20 @@ Route::get('/', function () {
 });
 
 // Sample
-Route::get('/sample', [\App\Http\Controllers\IndexController::class, 'show'])
+Route::get('/sample', [Controllers\IndexController::class, 'show'])
     ->middleware('sample');
-Route::get('/sample/{id}', [\App\Http\Controllers\IndexController::class, 'showId']);
+Route::get('/sample/{id}', [Controllers\IndexController::class, 'showId']);
 // Tweet
-Route::get('/tweet', \App\Http\Controllers\Tweet\IndexController::class)
+Route::get('/tweet', Controllers\Tweet\IndexController::class)
     ->name('tweet.index');
 Route::middleware('auth')->group(function () {
-    Route::post('/tweet/create', \App\Http\Controllers\Tweet\CreateController::class)
+    Route::post('/tweet/create', Controllers\Tweet\CreateController::class)
         ->name('tweet.create');
-    Route::get('/tweet/update/{tweetId}', \App\Http\Controllers\Tweet\Update\IndexController::class)
+    Route::get('/tweet/update/{tweetId}', Controllers\Tweet\Update\IndexController::class)
         ->name('tweet.update.index')->where('tweetId', '[0-9]+');
-    Route::put('/tweet/update/{tweetId}', \App\Http\Controllers\Tweet\Update\PutController::class)
+    Route::put('/tweet/update/{tweetId}', Controllers\Tweet\Update\PutController::class)
         ->name('tweet.update.put')->where('tweetId', '[0-9]+');
-    Route::delete('/tweet/delete/{tweetId}', \App\Http\Controllers\Tweet\DeleteController::class)
+    Route::delete('/tweet/delete/{tweetId}', Controllers\Tweet\DeleteController::class)
         ->name('tweet.delete')->where('tweetId', '[0-9]+');
 });
 

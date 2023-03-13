@@ -1,41 +1,9 @@
-@php use Illuminate\Support\Facades\Auth; @endphp
-<!doctype html>
-<html lang="ja">
-<body>
-<h1>つぶやきアプリ</h1>
-@auth
-    <div>
-        <p>投稿フォーム</p>
-        <form action="{{route('tweet.create')}}" method="post">
-            @csrf
-            <label for="tweet-content">つぶやき</label>
-            <span>140文字まで</span>
-            <textarea id="tweet-content" type="text" name="tweet" placeholder="つぶやきを入力"></textarea>
-            @error('tweet')
-            <p style="color: red;">{{ $message }}</p>
-            @enderror
-            <button type="submit">投稿</button>
-        </form>
-    </div>
-@endauth
-<div>
-    @foreach($tweets as $tweet)
-        <details>
-            <summary>{{ $tweet->content }} by {{ $tweet->user->name }}</summary>
-            @if(Auth::id() === $tweet->user_id)
-                <div>
-                    <a href=" {{ route('tweet.update.index', ['tweetId' => $tweet->id]) }}">編集</a>
-                    <form action="{{ route('tweet.delete', ['tweetId' => $tweet->id]) }}" method="post">
-                        @method('DELETE')
-                        @csrf
-                        <button type="submit">削除</button>
-                    </form>
-                </div>
-            @else
-                編集できません
-            @endif
-        </details>
-    @endforeach
-</div>
-</body>
-</html>
+<x-layout title="TOP | つぶやきアプリ">
+    <x-layout.single>
+        <h2 class="text-center text-blue-500 text-4xl font-bold mt-8 mb-8">
+            つぶやきアプリ
+        </h2>
+        <x-tweet.form.post></x-tweet.form.post>
+    </x-layout.single>
+    <x-tweet.list :tweets="$tweets"></x-tweet.list>
+</x-layout>
